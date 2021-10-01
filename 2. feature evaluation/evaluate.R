@@ -209,6 +209,7 @@ ORs$changes = c(rep('Architectural', 16), rep('Cytological', 16))
 ORs$freq = T
 ORs$freq[ORs$num == 5 | ORs$num == 7 | ORs$num == 14] = F
 ORs$freq[ORs$size == 'small' & ORs$num == 3] = F
+ORs$freq[ORs$size == 'small' & ORs$num == 15] = F
 ORs$sig = ORs$include
 ORs$include = NULL
 # large: 5 #
