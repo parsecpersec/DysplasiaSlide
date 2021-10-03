@@ -276,3 +276,34 @@ ggplot(plot3, aes(x=feature, y=odds_ratio_3, color=size, size=final_selection)) 
   geom_hline(yintercept = 0, linetype = 'dashed', color = "blue", size = 1) +
   scale_size_manual(values=c(0.8, 2.5)) + scale_linetype_manual(values=c(6,1)) +
   geom_text(aes(label=num, y=lower_3-0.5), position=position_dodge(0.1), color='black', size=5)
+
+#### model metrics ####
+mod = read.csv('./models.csv', T, stringsAsFactors=F)
+mod$name = NA
+mod$px = ifelse(mod$size == 'small', 224, 1024)
+for(i in 1:nrow(mod)) {
+  mod$name[i] = paste0(sprintf('%02d', mod$num[i]), ' - ', eng[mod$num[i]], ' - ', mod$px[i])
+}
+mod$name = factor(mod$name, levels=rev(mod$name))
+mod$size = factor(mod$size, levels=c('small', 'large'))
+mod$num = sprintf('%02d', mod$num)
+
+pd = position_dodge(0.1)
+
+ggplot(mod, aes(x=name, y=accuracy, color=size)) + 
+  geom_point(shape=15, size=4) + coord_flip() +
+  ggtitle('') +
+  geom_errorbar(aes(ymin=lower_1, ymax=upper_1), position=pd, width=0, size=1.5) +
+  theme_bw() + theme(panel.background=element_blank(), text=element_text(face='bold',size=14),
+                     plot.title=element_text(hjust=0.5, size=20)) +
+  ylab('Accuracy (%)') + xlab('') +
+  geom_text(aes(label=num, y=lower_1-2), position=position_dodge(0.1), color='black', size=5)
+
+ggplot(mod, aes(x=name, y=AUC, color=size)) + 
+  geom_point(shape=15, size=4) + coord_flip() +
+  ggtitle('') +
+  geom_errorbar(aes(ymin=lower_2, ymax=upper_2), position=pd, width=0, size=1.5) +
+  theme_bw() + theme(panel.background=element_blank(), text=element_text(face='bold',size=14),
+                     plot.title=element_text(hjust=0.5, size=20)) +
+  ylab('AUC') + xlab('') +
+  geom_text(aes(label=num, y=lower_2-0.02), position=position_dodge(0.1), color='black', size=5)
