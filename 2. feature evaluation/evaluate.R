@@ -307,3 +307,18 @@ ggplot(mod, aes(x=name, y=AUC, color=size)) +
                      plot.title=element_text(hjust=0.5, size=20)) +
   ylab('AUC') + xlab('') +
   geom_text(aes(label=num, y=lower_2-0.02), position=position_dodge(0.1), color='black', size=5)
+
+#### plot loss ####
+losses = list.files('./loss_data/', pattern='^loss-10e-6-LR-')
+for(loss_i in losses) {
+  loss = read.csv(paste0('.loss_data/', loss_i), F, stringsAsFactors=F)
+  loss$epoch = 1:200
+  tit = gsub('loss-10e-6-LR-', '', loss_i)
+  tit = gsub('.csv', '', tit)
+  tit = gsub('-', ' - ', tit)
+  tiff(paste0('../results/loss/', tit, '.tiff'), res=300, height=1200, width=2000)
+  print(ggplot(loss, aes(x=epoch, y=V1, color='tomato')) + geom_point() + ggtitle(tit) + theme_bw() +
+          theme(panel.background=element_blank(), text=element_text(face='bold',size=12),
+                title=element_text(size=15), legend.position='none') + geom_line(size=1) + ylab('loss'))
+  dev.off()
+}
