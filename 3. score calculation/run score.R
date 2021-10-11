@@ -42,9 +42,20 @@ dat$dys_bdkq = factor(dat$dys_bdkq, levels=c("Hyperplasia",
                                              "Mild dysplasia",
                                              "Moderate dysplasia",
                                              "Severe dysplasia"))
-#### view softmax ####
+#### view feature score ####
 library(ggplot2)
-ggplot()
+library(reshape2)
+dat2 = melt(dat[,series])
+dat2$size = gsub('.*_', '', dat2$variable)
+dat2$size = factor(dat2$size, levels=c('small', 'large'))
+lev = name[order(name)]
+dat2$variable = factor(dat2$variable, levels=rev(lev))
+ggplot(dat2, aes(x=variable, y=value)) + geom_boxplot(aes(fill=size), size=0.1, outlier.shape=NA) + 
+  coord_flip() + theme_bw() + xlab('Scores of the Features') + ylab('') +
+  ggtitle('Distribution of Feature Scores') +
+  theme(panel.background=element_blank(), axis.text=element_text(size = 15, face='bold'),
+        title=element_text(size = 24, hjust=0.5),
+        legend.text=element_text(size=15, face='bold'))
 
 #### OR assess ####
 OR = data.frame()
