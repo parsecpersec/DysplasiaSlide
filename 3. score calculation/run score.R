@@ -30,7 +30,10 @@ for(i in 1:length(files)) {
   temp = read.csv(files[i], F, stringsAsFactors=F)
   dat = cbind(dat, temp$V2)
 }
-colnames(dat)[series] = gsub('./soft/Soft_', '', files)
+name = gsub('./soft/Soft_', '', files)
+name = gsub('.csv', '', name)
+name[grepl('^[1-9]_', name)] = paste0('0', name[grepl('^[1-9]_', name)])
+colnames(dat)[series] = name
 for(i in series) {
   dat[,i] = 10*dat[,i]    # softmax (0-1) -> (0-10)
 }
@@ -61,10 +64,7 @@ colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
 # OR sorted by name
-OR2 = OR
-OR2$var = gsub('[.]csv', '', OR2$var)
-OR2$var[grepl('^[1-9]_', OR2$var)] = paste0('0', OR2$var[grepl('^[1-9]_', OR2$var)])
-OR2 = plyr::arrange(OR2, include, var, decreasing=F)
+OR2 = plyr::arrange(OR, include, var, decreasing=F)
 OR2$var = factor(OR2$var, levels=rev(OR2$var))
 OR2[,1:3] = log(OR2[,1:3])  # if OR too large
 
