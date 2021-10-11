@@ -60,7 +60,11 @@ rownames(OR) = 1:length(files)
 colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
-OR2 = plyr::arrange(OR, include, OR, decreasing=T)
+# OR sorted by name
+OR2 = OR
+OR2$var = gsub('[.]csv', '', OR2$var)
+OR2$var[grepl('^[1-9]_', OR2$var)] = paste0('0', OR2$var[grepl('^[1-9]_', OR2$var)])
+OR2 = plyr::arrange(OR2, include, var, decreasing=F)
 OR2$var = factor(OR2$var, levels=rev(OR2$var))
 OR2[,1:3] = log(OR2[,1:3])  # if OR too large
 
