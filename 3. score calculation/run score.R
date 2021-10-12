@@ -92,3 +92,81 @@ ggplot(OR2, aes(x=var, y=OR, color=include)) + coord_flip() +
         title = element_text(size = 18, hjust=0.5), legend.position='none') +
   scale_color_manual(values=c('grey', 'tomato'))
   
+#### part3 fixed features ####
+# included features
+features = c(paste0(eng[1], ' - 1024'),
+             paste0(eng[2], ' - 1024'),
+             paste0(eng[3], ' - 1024'),
+             paste0(eng[4], ' - 1024'),
+             paste0(eng[6], ' - 1024'),
+             paste0(eng[8], ' - 224'),
+             paste0(eng[9], ' - 224'),
+             paste0(eng[10], ' - 224'),
+             paste0(eng[11], ' - 224'),
+             paste0(eng[12], ' - 224'),
+             paste0(eng[13], ' - 1024'),
+             paste0(eng[16], ' - 224'))
+filename = c('1_large', '2_large', '3_large', '4_large',
+             '6_large', '8_small', '9_small', '10_small',
+             '11_small', '12_small', '13_large', '16_small')
+dat = read.csv('./saved.csv', T, stringsAsFactors=F)
+files = paste0('./soft/Soft_', filename, '.csv')
+series = 9:(8+length(files))
+for(i in 1:length(files)) {
+  temp = read.csv(files[i], F, stringsAsFactors=F)
+  dat = cbind(dat, temp$V2)
+}
+name = gsub('./soft/Soft_', '', files)
+name = gsub('.csv', '', name)
+name[grepl('^[1-9]_', name)] = paste0('0', name[grepl('^[1-9]_', name)])
+colnames(dat)[series] = name
+for(i in series) {
+  dat[,i] = 100*dat[,i]    # softmax (0-1) -> (0-100)
+}
+dat = dat[dat$dys_bdkq != 'Cancer',]
+dat$dys_bdkq = factor(dat$dys_bdkq, levels=c("Hyperplasia",
+                                             "Mild dysplasia",
+                                             "Moderate dysplasia",
+                                             "Severe dysplasia"))
+
+# OR assess
+OR = data.frame()
+for (i in 1:length(files)) {
+  fit = polr(dat$dys_bdkq ~ dat[,(i+8)], Hess=T)
+  res = exp(cbind(OR=coef(fit), confint.lm(fit, level=0.95)[1,]))
+  res = as.data.frame(res, stringsAsFactors=F)
+  res$var = c(paste0('lower_', i), paste0('upper_', i))
+  OR = rbind(OR, res)
+}
+
+OR$var = 1
+OR$var[seq(1, 2*length(files), 2)] = OR$V2[seq(2, 2*length(files), 2)]
+OR = OR[-seq(2, 2*length(files), 2),]
+rownames(OR) = 1:length(files)
+colnames(OR) = c('OR', 'lower', 'upper')
+OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
+OR$var = colnames(dat)[series]
+
+# OR sorted by name and sig
+OR2 = plyr::arrange(OR, include, var, decreasing=F)
+OR2$var = factor(OR2$var, levels=rev(OR2$var))
+OR2[,1:3] = log(OR2[,1:3])  # if OR too large
+
+# OR sorted by size
+OR2 = plyr::arrange(OR, var, decreasing=F)
+OR2$var = factor(OR2$var, levels=rev(OR2$var))
+OR2[,1:3] = log(OR2[,1:3])  # if OR too large
+
+pd = position_dodge(0.1)
+ggplot(OR2, aes(x=var, y=OR, color=include)) + coord_flip() +
+  ggtitle(paste0('Ordinal Logistic Regression Analyses of OED Features')) + 
+  geom_point(position=pd, size=3, shape=15) + 
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=0.4, position=pd, size=1.2) +
+  geom_line(position=pd, size = 0.75) + xlab('') + ylab('Odds Ratio (log scale)') +
+  geom_hline(yintercept = 0, linetype = 'dashed', color = "blue", size = 1) + theme_bw() +
+  theme(panel.background=element_blank()) +
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
+        title = element_text(size = 18, hjust=0.5), legend.position='none') +
+  scale_color_manual(values=c('grey', 'tomato'))
+
