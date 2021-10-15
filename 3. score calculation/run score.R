@@ -174,7 +174,7 @@ ggplot(OR2, aes(x=var, y=OR, color=include)) + coord_flip() +
 sum = rep(0, nrow(dat))
 n = 0
 for (i in 1:length(files)) {
-  if (OR$include[i]) {
+  if (T) {
     sum = sum + dat[(i+8)] *  OR$OR[(i)]
     n = n + 1
   }
