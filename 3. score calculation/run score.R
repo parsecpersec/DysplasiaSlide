@@ -170,3 +170,14 @@ ggplot(OR2, aes(x=var, y=OR, color=include)) + coord_flip() +
         title = element_text(size = 18, hjust=0.5), legend.position='none') +
   scale_color_manual(values=c('grey', 'tomato'))
 
+#### calculate score ####
+sum = rep(0, nrow(dat))
+n = 0
+for (i in 1:length(files)) {
+  if (OR$include[i]) {
+    sum = sum + dat[(i+8)] *  OR$OR[(i)]
+    n = n + 1
+  }
+}
+dat$score = sum[,1] / n
+
