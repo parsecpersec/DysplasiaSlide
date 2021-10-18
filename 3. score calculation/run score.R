@@ -181,3 +181,19 @@ for (i in 1:length(files)) {
 }
 dat$score = sum[,1] / n
 
+colnames(res2) = c('OR', 'lower', 'upper', 'var')
+res2$var = c('')  # rename
+res2$var = factor(res2$var, levels=res2$var)
+res2$mark = c(T, F, F, F, F)
+pd = position_dodge(0.1)
+ggplot(res2, aes(x=var, y=OR, color=mark)) + geom_point(position=pd, size=3, shape=15) + 
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=0.4, position=pd, size=1.2) +
+  ggtitle('') + xlab('') + ylab('Odds Ratio (OR)') +
+  theme_bw() + theme(panel.background=element_blank(), legend.position='none',
+                     axis.text.x = element_text(size = 15),
+                     axis.text.y = element_text(size = 15),
+                     title = element_text(size = 18, hjust=0.5)) +
+  geom_hline(yintercept = 1, linetype = 'dashed', color = "blue", size = 1) + 
+  scale_color_manual(values=c('black', 'tomato'))
+
+
