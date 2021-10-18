@@ -196,4 +196,11 @@ ggplot(res2, aes(x=var, y=OR, color=mark)) + geom_point(position=pd, size=3, sha
   geom_hline(yintercept = 1, linetype = 'dashed', color = "blue", size = 1) + 
   scale_color_manual(values=c('black', 'tomato'))
 
-
+#### extra ####
+library(ggpubr)
+label = levels(factor(dat$dys_bdkq))
+comps = combn(label, 2)
+mycomp = list(comps[,1], comps[,2], comps[,3], comps[,4], comps[,5], comps[,6])
+ggplot(dat, aes(x=dys_bdkq, y=score)) + geom_boxplot() + stat_compare_means(method='anova', label.y=85) +
+  stat_compare_means(method='kruskal', label.x=2, label.y=85) + 
+  stat_compare_means(comparisons=mycomp, method='wilcox')
