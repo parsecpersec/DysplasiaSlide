@@ -204,3 +204,40 @@ mycomp = list(comps[,1], comps[,2], comps[,3], comps[,4], comps[,5], comps[,6])
 ggplot(dat, aes(x=dys_bdkq, y=score)) + geom_boxplot() + stat_compare_means(method='anova', label.y=85) +
   stat_compare_means(method='kruskal', label.x=2, label.y=85) + 
   stat_compare_means(comparisons=mycomp, method='wilcox')
+
+#### loop score ####
+for(i in series) {
+  fit0 = orm(dys_bdkq~dat[,i]+age+sex+smoke+drink, data=dat)
+  res0 = exp(cbind(OR=coef(fit0), confint(fit0)))
+  res0 = as.data.frame(res0, stringsAsFactors=F)
+  colnames(res0) = c('OR', 'lower', 'upper')
+  res0 = res0[4:8,]
+  res0$var = c('')  # rename
+  res0$var = factor(res0$var, levels=res0$var)
+  res0$mark = c(T, F, F, F, F)
+  pd = position_dodge(0.1)
+  tiff(paste0('./multi OR loop/', colnames(dat)[i], '.tiff'), width=1800, height=1200, res=300)
+  print(ggplot(res0, aes(x=var, y=OR, color=mark)) + geom_point(position=pd, size=3, shape=15) + 
+          geom_errorbar(aes(ymin=lower, ymax=upper), width=0.4, position=pd, size=1.2) +
+          ggtitle(colnames(dat)[i]) + xlab('') + ylab('Odds Ratio (OR)') +
+          theme_bw() + theme(panel.background=element_blank(), legend.position='none',
+                             axis.text.x = element_text(size = 15),
+                             axis.text.y = element_text(size = 15),
+                             title = element_text(size = 18, hjust=0.5)) +
+          geom_hline(yintercept = 1, linetype = 'dashed', color = "blue", size = 1) + 
+          scale_color_manual(values=c('black', 'tomato')))
+  dev.off()
+}
+
+library(ggpubr)
+label = levels(factor(dat$dys_bdkq))
+comps = combn(label, 2)
+mycomp = list(comps[,1], comps[,2], comps[,3], comps[,4], comps[,5], comps[,6])
+for(i in series) {
+  tiff(paste0('./boxplot loop/', colnames(dat)[i], '.tiff'), width=1800, height=1200, res=300)
+  print(ggplot(dat, aes(x=dys_bdkq, y=dat[,i])) + geom_boxplot() + 
+          stat_compare_means(method='anova', label.y=0.9*min(dat[,i])) +
+          stat_compare_means(method='kruskal', label.x=2, label.y=0.9*min(dat[,i])) + 
+          stat_compare_means(comparisons=mycomp, method='wilcox'))
+  dev.off()
+}
