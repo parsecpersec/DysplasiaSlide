@@ -205,7 +205,7 @@ ggplot(dat, aes(x=dys_bdkq, y=score)) + geom_boxplot() + stat_compare_means(meth
   stat_compare_means(method='kruskal', label.x=2, label.y=85) + 
   stat_compare_means(comparisons=mycomp, method='wilcox')
 
-#### loop score ####
+#### loop score loop boxplot ####
 for(i in series) {
   fit0 = orm(dys_bdkq~dat[,i]+age+sex+smoke+drink, data=dat)
   res0 = exp(cbind(OR=coef(fit0), confint(fit0)))
@@ -235,8 +235,8 @@ comps = combn(label, 2)
 mycomp = list(comps[,1], comps[,2], comps[,3], comps[,4], comps[,5], comps[,6])
 for(i in series) {
   tiff(paste0('./boxplot loop/', colnames(dat)[i], '.tiff'), width=1800, height=1200, res=300)
-  print(ggplot(dat, aes(x=dys_bdkq, y=dat[,i])) + geom_boxplot() + 
-          stat_compare_means(method='anova', label.y=0.9*min(dat[,i])) +
+  print(ggplot(dat, aes(x=dys_bdkq, y=dat[,i])) + geom_boxplot() + ggtitle(colnames(dat)[i]) +
+          stat_compare_means(method='anova', label.y=0.9*min(dat[,i])) + xlab('') +
           stat_compare_means(method='kruskal', label.x=2, label.y=0.9*min(dat[,i])) + 
           stat_compare_means(comparisons=mycomp, method='wilcox'))
   dev.off()
