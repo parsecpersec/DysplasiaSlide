@@ -244,7 +244,7 @@ for(i in series) {
 }
 
 #### density ####
-ggplot(dat, aes(x=score, color=dys_bdkq)) + geom_density(size=3) + theme_bw() +
+ggplot(dat, aes(x=score, color=dys_bdkq, fill=dys_bdkq)) + geom_density(alpha=0.1, size=1) + theme_bw() +
   theme(panel.background=element_blank(), title=element_text(size=18), 
         axis.text=element_text(size=15), plot.title=element_text(hjust=0.5)) + 
   ggtitle('Density') + xlab('Score') + ylab('')
