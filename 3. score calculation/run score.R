@@ -74,18 +74,19 @@ rownames(OR) = 1:length(files)
 colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
-# OR sorted by name
-OR2 = plyr::arrange(OR, include, var, decreasing=F)
+
+# OR sorted by size
+OR2 = plyr::arrange(OR, var, decreasing=F)
 OR2$var = factor(OR2$var, levels=rev(OR2$var))
-OR2[,1:3] = log(OR2[,1:3])  # if OR too large
+# OR2[,1:3] = log(OR2[,1:3])  # if OR too large
 
 pd = position_dodge(0.1)
 ggplot(OR2, aes(x=var, y=OR, color=include)) + coord_flip() +
   ggtitle(paste0('Ordinal Logistic Regression Analyses of OED Features')) + 
   geom_point(position=pd, size=3, shape=15) + 
   geom_errorbar(aes(ymin=lower, ymax=upper), width=0.4, position=pd, size=1.2) +
-  geom_line(position=pd, size = 0.75) + xlab('') + ylab('Odds Ratio (log scale)') +
-  geom_hline(yintercept = 0, linetype = 'dashed', color = "blue", size = 1) + theme_bw() +
+  geom_line(position=pd, size = 0.75) + xlab('') + ylab('Odds Ratio') +
+  geom_hline(yintercept = 1, linetype = 'dashed', color = "blue", size = 1) + theme_bw() +
   theme(panel.background=element_blank()) +
   theme(axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15),
