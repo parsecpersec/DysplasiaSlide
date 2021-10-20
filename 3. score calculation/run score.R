@@ -242,3 +242,9 @@ for(i in series) {
           stat_compare_means(comparisons=mycomp, method='wilcox'))
   dev.off()
 }
+
+#### density ####
+ggplot(dat, aes(x=score, color=dys_bdkq)) + geom_density(size=3) + theme_bw() +
+  theme(panel.background=element_blank(), title=element_text(size=18), 
+        axis.text=element_text(size=15), plot.title=element_text(hjust=0.5)) + 
+  ggtitle('Density') + xlab('Score') + ylab('')
