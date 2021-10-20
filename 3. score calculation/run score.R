@@ -35,7 +35,7 @@ name = gsub('.csv', '', name)
 name[grepl('^[1-9]_', name)] = paste0('0', name[grepl('^[1-9]_', name)])
 colnames(dat)[series] = name
 for(i in series) {
-  dat[,i] = 10*dat[,i]    # softmax (0-1) -> (0-10)
+  dat[,i] = 100*dat[,i]    # softmax (0-1) -> (0-100)
 }
 dat = dat[dat$dys_bdkq != 'Cancer',]
 dat$dys_bdkq = factor(dat$dys_bdkq, levels=c("Hyperplasia",
