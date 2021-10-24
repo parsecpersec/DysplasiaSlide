@@ -140,9 +140,9 @@ for (i in 1:length(filename)) {
 }
 
 OR$var = 1
-OR$var[seq(1, 2*length(files), 2)] = OR$V2[seq(2, 2*length(files), 2)]
-OR = OR[-seq(2, 2*length(files), 2),]
-rownames(OR) = 1:length(files)
+OR$var[seq(1, 2*length(filename), 2)] = OR$V2[seq(2, 2*length(filename), 2)]
+OR = OR[-seq(2, 2*length(filename), 2),]
+rownames(OR) = 1:length(filename)
 colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
@@ -259,9 +259,9 @@ for (i in 1:length(filename)) {
 }
 
 OR$var = 1
-OR$var[seq(1, 2*length(files), 2)] = OR$V2[seq(2, 2*length(files), 2)]
-OR = OR[-seq(2, 2*length(files), 2),]
-rownames(OR) = 1:length(files)
+OR$var[seq(1, 2*length(filename), 2)] = OR$V2[seq(2, 2*length(filename), 2)]
+OR = OR[-seq(2, 2*length(filename), 2),]
+rownames(OR) = 1:length(filename)
 colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
@@ -378,9 +378,9 @@ for (i in 1:length(filename)) {
 }
 
 OR$var = 1
-OR$var[seq(1, 2*length(files), 2)] = OR$V2[seq(2, 2*length(files), 2)]
-OR = OR[-seq(2, 2*length(files), 2),]
-rownames(OR) = 1:length(files)
+OR$var[seq(1, 2*length(filename), 2)] = OR$V2[seq(2, 2*length(filename), 2)]
+OR = OR[-seq(2, 2*length(filename), 2),]
+rownames(OR) = 1:length(filename)
 colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
@@ -497,9 +497,9 @@ for (i in 1:length(filename)) {
 }
 
 OR$var = 1
-OR$var[seq(1, 2*length(files), 2)] = OR$V2[seq(2, 2*length(files), 2)]
-OR = OR[-seq(2, 2*length(files), 2),]
-rownames(OR) = 1:length(files)
+OR$var[seq(1, 2*length(filename), 2)] = OR$V2[seq(2, 2*length(filename), 2)]
+OR = OR[-seq(2, 2*length(filename), 2),]
+rownames(OR) = 1:length(filename)
 colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
@@ -621,9 +621,9 @@ for (i in 1:length(filename)) {
 }
 
 OR$var = 1
-OR$var[seq(1, 2*length(files), 2)] = OR$V2[seq(2, 2*length(files), 2)]
-OR = OR[-seq(2, 2*length(files), 2),]
-rownames(OR) = 1:length(files)
+OR$var[seq(1, 2*length(filename), 2)] = OR$V2[seq(2, 2*length(filename), 2)]
+OR = OR[-seq(2, 2*length(filename), 2),]
+rownames(OR) = 1:length(filename)
 colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
@@ -745,9 +745,9 @@ for (i in 1:length(filename)) {
 }
 
 OR$var = 1
-OR$var[seq(1, 2*length(files), 2)] = OR$V2[seq(2, 2*length(files), 2)]
-OR = OR[-seq(2, 2*length(files), 2),]
-rownames(OR) = 1:length(files)
+OR$var[seq(1, 2*length(filename), 2)] = OR$V2[seq(2, 2*length(filename), 2)]
+OR = OR[-seq(2, 2*length(filename), 2),]
+rownames(OR) = 1:length(filename)
 colnames(OR) = c('OR', 'lower', 'upper')
 OR$include = ifelse((OR$lower-1)*(OR$upper-1)>0, T, F)
 OR$var = colnames(dat)[series]
