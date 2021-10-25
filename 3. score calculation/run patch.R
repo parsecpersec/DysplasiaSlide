@@ -830,28 +830,6 @@ ggplot(dat, aes(x=score, fill=dys_bdkq, color=dys_bdkq)) + geom_density(size=1, 
   ggtitle(name) + xlab('Score') + ylab('Density')
 
 #### model: case mean ####
-files = list.files('./500/')
-for(f in files) {
-  temp = read.csv(paste0('./500/', f), F, stringsAsFactors=F)
-  if(grepl('large', f)) {
-    if(f == files[1]) {
-      large = temp
-      colnames(large)[1] = 'file'
-    } else {
-      large = cbind(large, temp$V2)
-    }
-    colnames(large)[ncol(large)] = gsub('[.]csv', '', f)
-  } else {
-    if(f == files[2]) {  # 10_small.csv
-      small = temp
-      colnames(small)[1] = 'file'
-    } else {
-      small = cbind(small, temp$V2)
-    }
-    colnames(small)[ncol(small)] = gsub('[.]csv', '', f)
-  }
-}
-write.csv(large, './500/large.csv', row.names=F, quote=F)
-write.csv(small, './500/small.csv', row.names=F, quote=F)
+
 
 #### end ####
