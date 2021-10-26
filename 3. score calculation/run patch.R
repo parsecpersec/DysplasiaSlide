@@ -830,6 +830,170 @@ ggplot(dat, aes(x=score, fill=dys_bdkq, color=dys_bdkq)) + geom_density(size=1, 
   ggtitle(name) + xlab('Score') + ylab('Density')
 
 #### model: case mean ####
+library(MASS)
+library(pROC)
+library(ggplot2)
 
+dat0 = dat  # backup
+
+# uni
+summary(fit)
+prob = predict.glm(fit, type=c('response'))
+dat = cbind(dat, prob)
+dat$OED1 = ifelse(dat$dys_bdkq == label[1], label[1], 'Others')
+dat$OED2 = ifelse(dat$dys_bdkq == label[2], label[2], 'Others')
+dat$OED3 = ifelse(dat$dys_bdkq == label[3], label[3], 'Others')
+dat$OED4 = ifelse(dat$dys_bdkq == label[4], label[4], 'Others')
+a = roc(response=dat$OED1, predictor=dat$Hyperplasia, levels=c(label[1], 'Others'), auc=T, ci=T)
+b = roc(response=dat$OED2, predictor=dat$`Mild dysplasia`, levels=c(label[2], 'Others'), auc=T, ci=T)
+c = roc(response=dat$OED3, predictor=dat$`Moderate dysplasia`, levels=c(label[3], 'Others'), auc=T, ci=T)
+d = roc(response=dat$OED4, predictor=dat$`Severe dysplasia`, levels=c(label[4], 'Others'), auc=T, ci=T)
+roc_data = data.frame(sen=a$sensitivities, spe=a$specificities, Category='Hyperplasia')
+roc_data = rbind(roc_data, data.frame(sen=b$sensitivities, spe=b$specificities, 
+                                      Category='Mild dysplasia'))
+roc_data = rbind(roc_data, data.frame(sen=c$sensitivities, spe=c$specificities, 
+                                      Category='Moderate dysplasia'))
+roc_data = rbind(roc_data, data.frame(sen=d$sensitivities, spe=d$specificities, 
+                                      Category='Severe dysplasia'))
+
+AUC = data.frame(hyper=a$ci, mild=b$ci, moderate=c$ci, severe=d$ci)
+rownames(AUC) = c('lower', 'area', 'upper')
+AUC$mean = rowMeans(AUC)
+AUC = round(AUC, 3)
+txt = paste0('AUC of Hyperplasia: ', AUC$hyper[2], ' (', AUC$hyper[1], ' - ', AUC$hyper[3], ')\n',
+             'AUC of Mild dysplasia: ', AUC$mild[2], ' (', AUC$mild[1], ' - ', AUC$mild[3], ')\n',
+             'AUC of Moderate dysplasia: ', AUC$moderate[2], 
+             ' (', AUC$moderate[1], ' - ', AUC$moderate[3], ')\n',
+             'AUC of Severe dysplasia: ', AUC$severe[2], 
+             ' (', AUC$severe[1], ' - ', AUC$severe[3], ')\n',
+             'Average AUC: ', AUC$mean[2], ' (', AUC$mean[1], ' - ', AUC$mean[3], ')\n')
+
+ggplot(data=roc_data, aes(x=1-spe, y=sen, color=Category)) + geom_path(size=1.5) + 
+  geom_abline(linetype=2, size=1) + theme_bw() + xlab('1 - Specificity') + ylab('Sensitivity') +
+  theme(panel.background=element_blank(), title=element_text(size=18), 
+        axis.text=element_text(size=15), plot.title=element_text(hjust=0.5),
+        legend.text=element_text(size=11, face='bold')) +
+  ggtitle('ROC Curve of the Model') +
+  annotate(geom='text', label=txt, x=0.8, y=0.2)
+
+# multi
+dat = dat0
+summary(fit2)
+prob = predict.glm(fit2, type=c('response'))
+dat = cbind(dat, prob)
+dat$OED1 = ifelse(dat$dys_bdkq == label[1], label[1], 'Others')
+dat$OED2 = ifelse(dat$dys_bdkq == label[2], label[2], 'Others')
+dat$OED3 = ifelse(dat$dys_bdkq == label[3], label[3], 'Others')
+dat$OED4 = ifelse(dat$dys_bdkq == label[4], label[4], 'Others')
+a = roc(response=dat$OED1, predictor=dat$Hyperplasia, levels=c(label[1], 'Others'), auc=T, ci=T)
+b = roc(response=dat$OED2, predictor=dat$`Mild dysplasia`, levels=c(label[2], 'Others'), auc=T, ci=T)
+c = roc(response=dat$OED3, predictor=dat$`Moderate dysplasia`, levels=c(label[3], 'Others'), auc=T, ci=T)
+d = roc(response=dat$OED4, predictor=dat$`Severe dysplasia`, levels=c(label[4], 'Others'), auc=T, ci=T)
+roc_data = data.frame(sen=a$sensitivities, spe=a$specificities, Category='Hyperplasia')
+roc_data = rbind(roc_data, data.frame(sen=b$sensitivities, spe=b$specificities, 
+                                      Category='Mild dysplasia'))
+roc_data = rbind(roc_data, data.frame(sen=c$sensitivities, spe=c$specificities, 
+                                      Category='Moderate dysplasia'))
+roc_data = rbind(roc_data, data.frame(sen=d$sensitivities, spe=d$specificities, 
+                                      Category='Severe dysplasia'))
+
+AUC = data.frame(hyper=a$ci, mild=b$ci, moderate=c$ci, severe=d$ci)
+rownames(AUC) = c('lower', 'area', 'upper')
+AUC$mean = rowMeans(AUC)
+AUC = round(AUC, 3)
+txt = paste0('AUC of Hyperplasia: ', AUC$hyper[2], ' (', AUC$hyper[1], ' - ', AUC$hyper[3], ')\n',
+             'AUC of Mild dysplasia: ', AUC$mild[2], ' (', AUC$mild[1], ' - ', AUC$mild[3], ')\n',
+             'AUC of Moderate dysplasia: ', AUC$moderate[2], 
+             ' (', AUC$moderate[1], ' - ', AUC$moderate[3], ')\n',
+             'AUC of Severe dysplasia: ', AUC$severe[2], 
+             ' (', AUC$severe[1], ' - ', AUC$severe[3], ')\n',
+             'Average AUC: ', AUC$mean[2], ' (', AUC$mean[1], ' - ', AUC$mean[3], ')\n')
+
+ggplot(data=roc_data, aes(x=1-spe, y=sen, color=Category)) + geom_path(size=1.5) + 
+  geom_abline(linetype=2, size=1) + theme_bw() + xlab('1 - Specificity') + ylab('Sensitivity') +
+  theme(panel.background=element_blank(), title=element_text(size=18), 
+        axis.text=element_text(size=15), plot.title=element_text(hjust=0.5),
+        legend.text=element_text(size=11, face='bold')) +
+  ggtitle('ROC Curve of the Model') +
+  annotate(geom='text', label=txt, x=0.8, y=0.2)
+
+#### try 1(23)4 ####
+# uni
+dat = dat0
+dat$dys_bdkq = as.character(dat$dys_bdkq)
+dat$dys_bdkq = ifelse(dat$dys_bdkq == 'Mild dysplasia' | dat$dys_bdkq == 'Moderate dysplasia', 
+                      'Low grade', dat$dys_bdkq)
+dat$dys_bdkq[dat$dys_bdkq == 'Severe dysplasia'] = 'High grade'
+label = c('Hyperplasia', 'Low grade', 'High grade')
+dat$dys_bdkq = factor(dat$dys_bdkq, levels=label)
+fit3 = polr(dys_bdkq~score, Hess=T, data=dat)
+summary(fit3)
+prob = predict.glm(fit3, type=c('response'))
+dat = cbind(dat, prob)
+dat$OED1 = ifelse(dat$dys_bdkq == label[1], label[1], 'Others')
+dat$OED2 = ifelse(dat$dys_bdkq == label[2], label[2], 'Others')
+dat$OED3 = ifelse(dat$dys_bdkq == label[3], label[3], 'Others')
+a = roc(response=dat$OED1, predictor=dat$Hyperplasia, levels=c(label[1], 'Others'), auc=T, ci=T)
+b = roc(response=dat$OED2, predictor=dat$`Low grade`, levels=c(label[2], 'Others'), auc=T, ci=T)
+c = roc(response=dat$OED3, predictor=dat$`High grade`, levels=c(label[3], 'Others'), auc=T, ci=T)
+roc_data = data.frame(sen=a$sensitivities, spe=a$specificities, Category=label[1])
+roc_data = rbind(roc_data, data.frame(sen=b$sensitivities, spe=b$specificities, Category=label[2]))
+roc_data = rbind(roc_data, data.frame(sen=c$sensitivities, spe=c$specificities, Category=label[3]))
+
+AUC = data.frame(hyper=a$ci, low=b$ci, high=c$ci)
+rownames(AUC) = c('lower', 'area', 'upper')
+AUC$mean = rowMeans(AUC)
+AUC = round(AUC, 3)
+txt = paste0('AUC of Hyperplasia: ', AUC$hyper[2], ' (', AUC$hyper[1], ' - ', AUC$hyper[3], ')\n',
+             'AUC of Low grade: ', AUC$low[2], ' (', AUC$low[1], ' - ', AUC$low[3], ')\n',
+             'AUC of High grade: ', AUC$high[2], ' (', AUC$high[1], ' - ', AUC$high[3], ')\n',
+             'Average AUC: ', AUC$mean[2], ' (', AUC$mean[1], ' - ', AUC$mean[3], ')\n')
+
+ggplot(data=roc_data, aes(x=1-spe, y=sen, color=Category)) + geom_path(size=1.5) + 
+  geom_abline(linetype=2, size=1) + theme_bw() + xlab('1 - Specificity') + ylab('Sensitivity') +
+  theme(panel.background=element_blank(), title=element_text(size=18), 
+        axis.text=element_text(size=15), plot.title=element_text(hjust=0.5),
+        legend.text=element_text(size=11, face='bold')) +
+  ggtitle('ROC Curve of the Model') +
+  annotate(geom='text', label=txt, x=0.8, y=0.2)
+
+# multi
+dat = dat0
+dat$dys_bdkq = as.character(dat$dys_bdkq)
+dat$dys_bdkq = ifelse(dat$dys_bdkq == 'Mild dysplasia' | dat$dys_bdkq == 'Moderate dysplasia', 
+                      'Low grade', dat$dys_bdkq)
+dat$dys_bdkq[dat$dys_bdkq == 'Severe dysplasia'] = 'High grade'
+label = c('Hyperplasia', 'Low grade', 'High grade')
+dat$dys_bdkq = factor(dat$dys_bdkq, levels=label)
+fit3 = polr(dys_bdkq~score+age+sex+smoke+drink, Hess=T, data=dat)
+summary(fit3)
+prob = predict.glm(fit3, type=c('response'))
+dat = cbind(dat, prob)
+dat$OED1 = ifelse(dat$dys_bdkq == label[1], label[1], 'Others')
+dat$OED2 = ifelse(dat$dys_bdkq == label[2], label[2], 'Others')
+dat$OED3 = ifelse(dat$dys_bdkq == label[3], label[3], 'Others')
+a = roc(response=dat$OED1, predictor=dat$Hyperplasia, levels=c(label[1], 'Others'), auc=T, ci=T)
+b = roc(response=dat$OED2, predictor=dat$`Low grade`, levels=c(label[2], 'Others'), auc=T, ci=T)
+c = roc(response=dat$OED3, predictor=dat$`High grade`, levels=c(label[3], 'Others'), auc=T, ci=T)
+roc_data = data.frame(sen=a$sensitivities, spe=a$specificities, Category=label[1])
+roc_data = rbind(roc_data, data.frame(sen=b$sensitivities, spe=b$specificities, Category=label[2]))
+roc_data = rbind(roc_data, data.frame(sen=c$sensitivities, spe=c$specificities, Category=label[3]))
+
+AUC = data.frame(hyper=a$ci, low=b$ci, high=c$ci)
+rownames(AUC) = c('lower', 'area', 'upper')
+AUC$mean = rowMeans(AUC)
+AUC = round(AUC, 3)
+txt = paste0('AUC of Hyperplasia: ', AUC$hyper[2], ' (', AUC$hyper[1], ' - ', AUC$hyper[3], ')\n',
+             'AUC of Low grade: ', AUC$low[2], ' (', AUC$low[1], ' - ', AUC$low[3], ')\n',
+             'AUC of High grade: ', AUC$high[2], ' (', AUC$high[1], ' - ', AUC$high[3], ')\n',
+             'Average AUC: ', AUC$mean[2], ' (', AUC$mean[1], ' - ', AUC$mean[3], ')\n')
+
+ggplot(data=roc_data, aes(x=1-spe, y=sen, color=Category)) + geom_path(size=1.5) + 
+  geom_abline(linetype=2, size=1) + theme_bw() + xlab('1 - Specificity') + ylab('Sensitivity') +
+  theme(panel.background=element_blank(), title=element_text(size=18), 
+        axis.text=element_text(size=15), plot.title=element_text(hjust=0.5),
+        legend.text=element_text(size=11, face='bold')) +
+  ggtitle('ROC Curve of the Model') +
+  annotate(geom='text', label=txt, x=0.8, y=0.2)
 
 #### end ####
