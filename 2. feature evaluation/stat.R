@@ -1,4 +1,9 @@
 #### OED grade distribution of positive patches ####
+dat1 = read.csv('./patch-C.csv', T, stringsAsFactors=F)
+name = colnames(dat1)[2:17]
+name = gsub('X[0-9]{1,2}', '', name)
+name = paste0(1:16, '. ', name)
+rm(dat1)
 dat = read.csv('./label.csv', T, stringsAsFactors=F)
 dat$dysplasia = gsub(' dysplasia', '', dat$dysplasia)
 dat$dysplasia = factor(dat$dysplasia, levels=c('hyperplasia', 'mild',
@@ -9,6 +14,7 @@ temp = dat[dat$X1 == 'YY',]
 
 library(ggplot2)
 library(reshape2)
+library(extrafont)
 for(i in 1:16) {
   temp = dat[dat[,(4+i)] == 'YY',]
   if(nrow(temp) != 0) {
