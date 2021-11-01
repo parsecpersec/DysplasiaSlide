@@ -26,7 +26,7 @@ for(i in 1:16) {
                                  axis.text=element_text(size=15), title=element_text(size=18),
                                  plot.title=element_text(size=20, hjust=0.5, family='SimHei'),
                                  axis.text.x=element_text(size=13)) +
-              geom_text(aes(label = scales::percent(2*..count../sum(..count..))), 
+              geom_text(aes(label = scales::percent(..prop..)), 
                         stat= "count", vjust = -0.25) +
               ggtitle(name[i]) + xlab('') + ylab('Quantity') + facet_grid(~size))
       dev.off()
