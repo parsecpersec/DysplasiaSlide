@@ -39,7 +39,7 @@ for(i in 1:16) {
                                  axis.text=element_text(size=15), title=element_text(size=18),
                                  plot.title=element_text(size=20, hjust=0.5, family='SimHei'),
                                  axis.text.x=element_text(size=13)) +
-              geom_text(aes(label = scales::percent(..count../sum(..count..)), accuracy=0.1), 
+              geom_text(aes(label = scales::percent(..count../sum(..count..), accuracy=0.1)), 
                         stat= "count", vjust = -0.25) +
               scale_x_discrete(labels=c('1', '2', '3', '4', '5')) +
               ggtitle(paste0(name[i], ' - large')) + xlab('') + ylab('Quantity'))
@@ -52,7 +52,7 @@ for(i in 1:16) {
                                  axis.text=element_text(size=15), title=element_text(size=18),
                                  plot.title=element_text(size=20, hjust=0.5, family='SimHei'),
                                  axis.text.x=element_text(size=13)) +
-              geom_text(aes(label = scales::percent(..count../sum(..count..)), accuracy=0.1), 
+              geom_text(aes(label = scales::percent(..count../sum(..count..), accuracy=0.1)), 
                         stat= "count", vjust = -0.25) +
               scale_x_discrete(labels=c('1', '2', '3', '4', '5')) +
               ggtitle(paste0(name[i], ' - small')) + xlab('') + ylab('Quantity'))
