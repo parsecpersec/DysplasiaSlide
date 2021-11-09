@@ -83,7 +83,7 @@ for (i in 1:16) {
 }
 OR1 = rbind(OR_c1, OR_d1)
 
-#### OR-2 high grade vs low grade ####
+#### OR-2 high risk vs low risk ####
 dat_c2 = dat_c
 dat_d2 = dat_d
 dat_c2$dysplasia = ifelse(dat_c2$dysplasia == 'hyperplasia' | dat_c2$dysplasia == 'mild dysplasia', 
@@ -110,7 +110,7 @@ for (i in 1:16) {
 }
 OR2 = rbind(OR_c2, OR_d2)
 
-#### OR-3 severe (high risk) vs others ####
+#### OR-3 severe vs others ####
 dat_c3 = dat_c
 dat_d3 = dat_d
 dat_c3$dysplasia = ifelse(dat_c3$dysplasia == 'severe dysplasia', '1_high_risk', '0_low_risk')
@@ -179,7 +179,7 @@ ggplot(plot1, aes(x=feature, y=odds_ratio_1, color=size, size=include_1)) +
 
 ggplot(plot2, aes(x=feature, y=odds_ratio_2, color=size, size=include_2)) + 
   geom_point(shape=15, size=4) + coord_flip() +
-  ggtitle('High Grade over Low Grade') +
+  ggtitle('High Risk over Low Risk') +
   geom_errorbar(aes(ymin=lower_2, ymax=upper_2, linetype=include_2), position=pd, width=0) +
   theme_bw() + theme(panel.background=element_blank(), text=element_text(face='bold',size=14),
                      plot.title=element_text(hjust=0.5, size=20)) +
@@ -190,7 +190,7 @@ ggplot(plot2, aes(x=feature, y=odds_ratio_2, color=size, size=include_2)) +
 
 ggplot(plot3, aes(x=feature, y=odds_ratio_3, color=size, size=include_3)) + 
   geom_point(shape=15, size=4) + coord_flip() +
-  ggtitle('High Risk over Others') +
+  ggtitle('Severe over Others') +
   geom_errorbar(aes(ymin=lower_3, ymax=upper_3, linetype=include_3), position=pd, width=0) +
   theme_bw() + theme(panel.background=element_blank(), text=element_text(face='bold',size=14),
                      plot.title=element_text(hjust=0.5, size=20)) +
@@ -257,7 +257,7 @@ ggplot(plot1, aes(x=feature, y=odds_ratio_1, color=size, size=final_selection)) 
 
 ggplot(plot2, aes(x=feature, y=odds_ratio_2, color=size, size=final_selection)) + 
   geom_point(shape=15, size=4) + coord_flip() +
-  ggtitle('High Grade over Low Grade') +
+  ggtitle('High Risk over Low Risk') +
   geom_errorbar(aes(ymin=lower_2, ymax=upper_2, linetype=final_selection), position=pd, width=0) +
   theme_bw() + theme(panel.background=element_blank(), text=element_text(face='bold',size=14),
                      plot.title=element_text(hjust=0.5, size=20)) +
@@ -268,7 +268,7 @@ ggplot(plot2, aes(x=feature, y=odds_ratio_2, color=size, size=final_selection)) 
 
 ggplot(plot3, aes(x=feature, y=odds_ratio_3, color=size, size=final_selection)) + 
   geom_point(shape=15, size=4) + coord_flip() +
-  ggtitle('High Risk over Others') +
+  ggtitle('Severe over Others') +
   geom_errorbar(aes(ymin=lower_3, ymax=upper_3, linetype=final_selection), position=pd, width=0) +
   theme_bw() + theme(panel.background=element_blank(), text=element_text(face='bold',size=14),
                      plot.title=element_text(hjust=0.5, size=20)) +
