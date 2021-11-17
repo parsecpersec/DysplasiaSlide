@@ -48,6 +48,23 @@ for(i in 1:16) {
   dev.off()
 }
 
+for(i in 1:16) {
+  tiff(filename=paste0('./plot/D_positive_', i, '.tiff'), res=300, height=1000, width=1000)
+  print(ggvenn(data=list(A=dat1[,1][dat1[,(i+1)] == 'Yes'],
+                         B=dat2[,1][dat2[,(i+1)] == 'Yes'],
+                         C=dat3[,1][dat3[,(i+1)] == 'Yes']),
+               show_percentage=F, fill_color=c('dodgerblue', 'indianred1', 'purple')))
+  dev.off()
+}
+for(i in 1:16) {
+  tiff(filename=paste0('./plot/D_negative_', i, '.tiff'), res=300, height=1000, width=1000)
+  print(ggvenn(data=list(A=dat1[,1][dat1[,(i+1)] == 'No'],
+                         B=dat2[,1][dat2[,(i+1)] == 'No'],
+                         C=dat3[,1][dat3[,(i+1)] == 'No']),
+               show_percentage=F, fill_color=c('dodgerblue', 'indianred1', 'purple')))
+  dev.off()
+}
+
 #### A+B 3 ####
 dat1 = dat[1:60,]
 dat2 = dat[61:299,]
