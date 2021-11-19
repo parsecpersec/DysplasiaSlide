@@ -77,7 +77,7 @@ datp2 = datp2[c(2,1),]
 datp1$ypos = cumsum(datp1$prop) - 0.5 * datp1$prop
 datp2$ypos = cumsum(datp2$prop) - 0.5 * datp2$prop
 datp = rbind(datp1, datp2)
-datp$group = c('A: kappa = 0.29', 'A: kappa = 0.29', 'B: kappa = 0.28', 'B: kappa = 0.28')
+datp$group = c('A: kappa = ka', 'A: kappa = ka', 'B: kappa = kb', 'B: kappa = kb')
 datp$text = paste0(as.character(round(datp$prop * 100, 1)), '%')
 
 # plot
