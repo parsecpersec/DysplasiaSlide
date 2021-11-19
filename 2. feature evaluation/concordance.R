@@ -15,8 +15,11 @@ kc = data.frame()
 for (i in 2:17) {
   kc = rbind(kc, 
              data.frame(feature=i-1,
-                        kappa=kappam.fleiss(data.frame(P1=dat1[,i], P2=dat2[,i], P3=dat3[,i]))$value))
+                        k1=kappa2(data.frame(P1=dat1[,i], P2=dat2[,i]))$value,
+                        k2=kappa2(data.frame(P1=dat1[,i], P2=dat3[,i]))$value,
+                        k3=kappa2(data.frame(P1=dat2[,i], P2=dat3[,i]))$value))
 }
+kc$k = rowMeans(kc[,2:4])
 write.csv(kc, 'kappa_C.csv', quote=F, row.names=F)
 
 for (i in 2:17) {
@@ -30,8 +33,11 @@ kd = data.frame()
 for (i in 2:17) {
   kd = rbind(kd, 
              data.frame(feature=i-1,
-                        kappa=kappam.fleiss(data.frame(P1=dat1[,i], P2=dat2[,i], P3=dat3[,i]))$value))
+                        k1=kappa2(data.frame(P1=dat1[,i], P2=dat2[,i]))$value,
+                        k2=kappa2(data.frame(P1=dat1[,i], P2=dat3[,i]))$value,
+                        k3=kappa2(data.frame(P1=dat2[,i], P2=dat3[,i]))$value))
 }
+kd$k = rowMeans(kd[,2:4])
 write.csv(kd, 'kappa_D.csv', quote=F, row.names=F)
 
 #### C+D 3 ####
