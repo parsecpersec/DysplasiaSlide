@@ -40,7 +40,7 @@ for (i in 2:17) {
 kd$k = rowMeans(kd[,2:4])
 write.csv(kd, 'kappa_D.csv', quote=F, row.names=F)
 
-#### C+D 3 ####
+#### C+D 3 old ####
 for(i in 1:16) {
   tiff(filename=paste0('./plot/C_positive_', i, '.tiff'), res=300, height=1000, width=1000)
   print(ggvenn(data=list(A=dat1[,1][dat1[,(i+1)] == 'Yes'],
@@ -74,6 +74,66 @@ for(i in 1:16) {
                show_percentage=F, fill_color=c('dodgerblue', 'indianred1', 'purple')))
   dev.off()
 }
+
+#### C+D 3 ####
+dat1 = readxl::read_xlsx('sheet.xlsx', sheet='C1')
+dat2 = readxl::read_xlsx('sheet.xlsx', sheet='C2')
+dat3 = readxl::read_xlsx('sheet.xlsx', sheet='C3')
+dat = dat1
+for (i in 2:17) {
+  condition = (dat1[,i] == 'Yes' & dat2[,i] == 'Yes' & dat3[,i] == 'Yes') |
+    (dat1[,i] == 'No' & dat2[,i] == 'No' & dat3[,i] == 'No')
+  dat[,i][condition] = 'Yes'
+  dat[,i][!condition] = 'No'
+}
+datp1 = data.frame()
+for(i in 2:17) {
+  datp1 = rbind(datp1, data.frame(feature=gsub('[0-9]*', '', colnames(dat)[i]),
+                                  num=length(dat[,i][dat[,i] == 'Yes']),
+                                  common='Yes',
+                                  size='C - 224'))
+}
+for(i in 2:17) {
+  datp1 = rbind(datp1, data.frame(feature=gsub('[0-9]*', '', colnames(dat)[i]),
+                                  num=length(dat[,i][dat[,i] == 'No']),
+                                  common='No',
+                                  size='C - 224'))
+}
+
+dat1 = readxl::read_xlsx('sheet.xlsx', sheet='D1')
+dat2 = readxl::read_xlsx('sheet.xlsx', sheet='D2')
+dat3 = readxl::read_xlsx('sheet.xlsx', sheet='D3')
+dat = dat1
+for (i in 2:17) {
+  condition = (dat1[,i] == 'Yes' & dat2[,i] == 'Yes' & dat3[,i] == 'Yes') |
+    (dat1[,i] == 'No' & dat2[,i] == 'No' & dat3[,i] == 'No')
+  dat[,i][condition] = 'Yes'
+  dat[,i][!condition] = 'No'
+}
+datp2 = data.frame()
+for(i in 2:17) {
+  datp2 = rbind(datp2, data.frame(feature=gsub('[0-9]*', '', colnames(dat)[i]),
+                                  num=length(dat[,i][dat[,i] == 'Yes']),
+                                  common='Yes',
+                                  size='D - 1024'))
+}
+for(i in 2:17) {
+  datp2 = rbind(datp2, data.frame(feature=gsub('[0-9]*', '', colnames(dat)[i]),
+                                  num=length(dat[,i][dat[,i] == 'No']),
+                                  common='No',
+                                  size='D - 1024'))
+}
+datp = rbind(datp1, datp2)
+datp$common = factor(datp$common, levels=c('No', 'Yes'))
+datp$feature = factor(datp$feature, levels=rev(gsub('[0-9]*', '', colnames(dat))))
+ggplot(datp, aes(x=feature, y=num, fill=common)) + geom_bar(stat='identity', position='stack') +
+  scale_fill_manual(values=c('indianred1', 'dodgerblue'), name=c(''), labels=c('No', 'Yes')) + 
+  facet_grid(~size) + theme_bw() + coord_flip() +
+  theme(panel.background=element_blank(), axis.text.x=element_text(family='Times New Roman'),
+        axis.text.y=element_text(size=12, face='bold', family='SimHei'),
+        strip.text=element_text(size=15, face='bold', family='Times New Roman'), 
+        legend.text=element_text(size=15, face='bold', family='SimHei')) +
+  xlab('') + ylab('') + ggtitle('')
 
 #### A+B 3 ####
 dat1 = dat[1:60,]
