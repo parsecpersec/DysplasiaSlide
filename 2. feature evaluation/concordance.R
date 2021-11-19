@@ -5,8 +5,10 @@ library(extrafont)
 
 #### record ####
 for (i in 2:17) {
-  dat[,i][dat1[,i] == 'Yes' & dat2[,i] == 'Yes' & dat3[,i] == 'Yes'] = 'Yes'
-  dat[,i][!(dat1[,i] == 'Yes' & dat2[,i] == 'Yes' & dat3[,i] == 'Yes')] = 'No'
+  condition = (dat1[,i] == 'Yes' & dat2[,i] == 'Yes' & dat3[,i] == 'Yes') |
+    (dat1[,i] == 'No' & dat2[,i] == 'No' & dat3[,i] == 'No')
+  dat[,i][condition] = 'Yes'
+  dat[,i][!condition] = 'No'
 }
 
 kc = data.frame()
@@ -18,8 +20,10 @@ for (i in 2:17) {
 write.csv(kc, 'kappa_C.csv', quote=F, row.names=F)
 
 for (i in 2:17) {
-  dat[,i][dat1[,i] == 'Yes' & dat2[,i] == 'Yes' & dat3[,i] == 'Yes'] = 'Yes'
-  dat[,i][!(dat1[,i] == 'Yes' & dat2[,i] == 'Yes' & dat3[,i] == 'Yes')] = 'No'
+  condition = (dat1[,i] == 'Yes' & dat2[,i] == 'Yes' & dat3[,i] == 'Yes') |
+    (dat1[,i] == 'No' & dat2[,i] == 'No' & dat3[,i] == 'No')
+  dat[,i][condition] = 'Yes'
+  dat[,i][!condition] = 'No'
 }
 
 kd = data.frame()
