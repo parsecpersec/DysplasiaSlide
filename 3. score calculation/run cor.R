@@ -7,7 +7,7 @@ library(factoextra)
 
 #### start ####
 
-#### slide level ####
+#### slide cor ####
 name = 'mean'
 for(f in filename) {
   if(grepl('large', f)) {
@@ -49,7 +49,7 @@ fviz_pca_ind(slide.pca, geom.ind='point', pointshape=21, pointsize=2,
   ggtitle("2D PCA-plot from 12-feature dataset") + theme_bw() +
   theme(plot.title = element_text(hjust = 0.5))
 
-#### patch level ####
+#### patch cor ####
 # rm(list=ls())
 corrplot(cor(as.matrix(large[,2:7]), method='pearson'), method='square', order='hclust',
          col=colorRampPalette(c('blue', 'white', 'tomato'))(200), mar=c(0, 0, 1, 0),
