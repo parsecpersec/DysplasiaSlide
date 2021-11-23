@@ -49,6 +49,9 @@ fviz_pca_ind(slide.pca, geom.ind='point', pointshape=21, pointsize=2,
   ggtitle("2D PCA-plot from 12-feature dataset") + theme_bw() +
   theme(plot.title = element_text(hjust = 0.5))
 
+loading = slide.pca$rotation
+write.csv(loading, 'loadings.csv', quote=F, row.names=T)
+
 #### patch cor ####
 # rm(list=ls())
 corrplot(cor(as.matrix(large[,2:7]), method='pearson'), method='square', order='hclust',
