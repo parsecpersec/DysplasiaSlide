@@ -42,7 +42,7 @@ ggplot(scree, aes(x=pc, y=Variances)) + geom_line(stat='identity', size=1.2) +
   theme(plot.title=element_text(size=20, hjust=0.5), axis.title=element_text(size=18),
         axis.text=element_text(size=14))
 
-dat$dysplsia = ifelse(dat$dys_bdkq == 'Hyperplasia', 'Nondysplasia', 'Dysplasia')
+dat$dysplasia = ifelse(dat$dys_bdkq == 'Hyperplasia', 'Nondysplasia', 'Dysplasia')
 fviz_pca_ind(slide.pca, geom.ind='point', pointshape=21, pointsize=2, 
              fill.ind=dat$dysplsia, col.ind='black', palette='jco', 
              addEllipses=T, label='var', col.var='black', repel=T, legend.title='Class') +
