@@ -44,7 +44,7 @@ ggplot(scree, aes(x=pc, y=Variances)) + geom_line(stat='identity', size=1.2) +
 
 dat$dysplasia = ifelse(dat$dys_bdkq == 'Hyperplasia', 'Nondysplasia', 'Dysplasia')
 fviz_pca_ind(slide.pca, geom.ind='point', pointshape=21, pointsize=2, 
-             fill.ind=dat$dysplsia, col.ind='black', palette='jco', 
+             fill.ind=dat$dysplasia, col.ind='black', palette='jco', 
              addEllipses=T, label='var', col.var='black', repel=T, legend.title='Class') +
   ggtitle("2D PCA-plot from 12-feature dataset") + theme_bw() +
   theme(plot.title = element_text(hjust = 0.5))
