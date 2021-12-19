@@ -48,3 +48,14 @@ for(f in img_D) {
 img_C = img_C[order(img_C)]
 img_D = img_D[order(img_D)]
 write.csv(c(img_C, img_D), 'CD.csv', quote=F, row.names=F)
+
+#### add previous anno ####
+dat_C = dat1[dat1$patch %in% img_C,]
+dat_C[dat_C == 'NN' | dat_C == 'YY'] = ''
+
+dat_D = dat2[dat2$patch %in% img_D,]
+dat_D[dat_D == 'NN' | dat_D == 'YY'] = ''
+
+write.csv(dat_C, 'C.csv', quote=F, row.names=F)
+write.csv(dat_D, 'D.csv', quote=F, row.names=F)
+
