@@ -37,10 +37,10 @@ img_D = img_file[grepl('D',img_file)]
 
 for(f in img_C) {
   file.copy(from=paste0(dir1, f, '.jpeg'), 
-            to=paste0('../../Annotation2/images/C/', f, '.jpeg'))
+            to=paste0('../../Annotation2/image/C/', f, '.jpeg'))
 }
 
 for(f in img_D) {
   file.copy(from=paste0(dir2, f, '.jpeg'), 
-            to=paste0('../../Annotation2/images/D/', f, '.jpeg'))
+            to=paste0('../../Annotation2/image/D/', f, '.jpeg'))
 }
