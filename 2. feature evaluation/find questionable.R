@@ -29,3 +29,18 @@ for(i in 2:ncol(dat2)) {
 }
 
 img = list.files(path='./questionable/', pattern='.jpeg', recursive=T)
+img_file = gsub('^.*/', '', img)
+img_file = gsub('_.*$', '', img_file)
+img_file = unique(img_file)
+img_C = img_file[grepl('C',img_file)]
+img_D = img_file[grepl('D',img_file)]
+
+for(f in img_C) {
+  file.copy(from=paste0(dir1, f, '.jpeg'), 
+            to=paste0('../../Annotation2/images/C/', f, '.jpeg'))
+}
+
+for(f in img_D) {
+  file.copy(from=paste0(dir2, f, '.jpeg'), 
+            to=paste0('../../Annotation2/images/D/', f, '.jpeg'))
+}
