@@ -44,3 +44,7 @@ for(f in img_D) {
   file.copy(from=paste0(dir2, f, '.jpeg'), 
             to=paste0('../../Annotation2/image/D/', f, '.jpeg'))
 }
+
+img_C = img_C[order(img_C)]
+img_D = img_D[order(img_D)]
+write.csv(c(img_C, img_D), 'CD.csv', quote=F, row.names=F)
